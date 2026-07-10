@@ -70,7 +70,8 @@ sampling seed, and reported corpus/pool sizes.
 
 ## Reproduce the published summaries and figures
 
-1. Download the companion Zenodo data archive when its DOI is published.
+1. Obtain the companion replication package from Zenodo using the stable concept
+   DOI <https://doi.org/10.5281/zenodo.21289889>.
 2. Extract it so that canonical records appear under `data/runs/v1/`.
 3. Validate that the derived summary agrees with every canonical JSON record:
 
@@ -127,9 +128,10 @@ uv run nexus run pilot \
 ## Data and citation
 
 - Code: <https://github.com/aadivar/nexus-score-arxiv-preprint-code>
-- Data: Zenodo DOI to be added after deposition
+- Replication package: <https://doi.org/10.5281/zenodo.21289889>
 - License: MIT; see [`LICENSE`](LICENSE)
 
-When reusing the code or data, please cite the manuscript and the final archived
-release. A versioned code archive and the Zenodo data DOI should be used for
-long-term reproducibility once available.
+When reusing the code or data, please cite the manuscript and the archived
+replication package. Use the stable Zenodo concept DOI for long-term
+reproducibility; a version-specific DOI may be used when an exact release must be
+identified.
