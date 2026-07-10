@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Nexus Score OpenAlex-MCP methodology: measuring AI-readiness of scholarly records through controlled metadata withholding, restoration, grounding, misattribution, cost, and visibility experiments."
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Nexus Score authors" }]
 
 dependencies = [

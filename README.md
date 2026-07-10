@@ -129,7 +129,8 @@ uv run nexus run pilot \
 
 - Code: <https://github.com/aadivar/nexus-score-arxiv-preprint-code>
 - Replication package: <https://doi.org/10.5281/zenodo.21289889>
-- License: MIT; see [`LICENSE`](LICENSE)
+- License: GNU Affero General Public License v3.0 or later
+  (`AGPL-3.0-or-later`); see [`LICENSE`](LICENSE)
 
 When reusing the code or data, please cite the manuscript and the archived
 replication package. Use the stable Zenodo concept DOI for long-term
