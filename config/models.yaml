@@ -1,0 +1,93 @@
+# Frozen model slate for the agent-run phase. The `id` field is what gets sent
+# to the provider API verbatim, and it is logged with every run so a recorded
+# misattribution can always be traced back to the exact model version.
+#
+# Cost estimates are USD per 1M tokens at the time of writing; update only
+# alongside a study version bump so cost-per-correct-answer remains comparable
+# across runs.
+
+version: v1
+
+providers:
+  fireworks:
+    base_url: https://api.fireworks.ai/inference/v1
+    api_key_env: FIREWORKS_API_KEY
+    # Fireworks exposes an OpenAI-compatible /chat/completions endpoint.
+    sdk: openai_compatible
+
+  openai:
+    base_url: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+    sdk: openai_compatible
+
+models:
+  # Slate confirmed live on this Fireworks account on 2026-05-24 via
+  # GET /v1/models. Replaced llama-v3p3-70b-instruct and gemma-4-31b-it
+  # (both 404 on this account) with three other deployed open models so the
+  # open-weights diversity claim still holds across DeepSeek + OSS + Moonshot
+  # + Zhipu families.
+
+  # Prices in USD per 1M tokens, captured from provider pricing pages on
+  # 2026-05-24. Cache for any rerun should be locked to this version.
+
+  - name: deepseek-v4-pro
+    provider: fireworks
+    id: accounts/fireworks/models/deepseek-v4-pro
+    family: deepseek
+    open_weights: true
+    context_tokens: 131072
+    supports_tools: true
+    cost_per_1m_input_usd: 1.74
+    cost_per_1m_output_usd: 3.48
+    cost_per_1m_cached_input_usd: 0.87   # Fireworks: 50% off all cached input
+
+  - name: gpt-oss-120b
+    provider: fireworks
+    id: accounts/fireworks/models/gpt-oss-120b
+    family: gpt-oss
+    open_weights: true
+    context_tokens: 131072
+    supports_tools: true
+    cost_per_1m_input_usd: 0.15
+    cost_per_1m_output_usd: 0.60
+    cost_per_1m_cached_input_usd: 0.075  # 50% off
+
+  - name: kimi-k2p6
+    provider: fireworks
+    id: accounts/fireworks/models/kimi-k2p6
+    family: moonshot
+    open_weights: true
+    context_tokens: 131072
+    supports_tools: true
+    cost_per_1m_input_usd: 0.95
+    cost_per_1m_output_usd: 4.00
+    cost_per_1m_cached_input_usd: 0.16   # Fireworks-published cached rate
+
+  - name: glm-5p1
+    provider: fireworks
+    id: accounts/fireworks/models/glm-5p1
+    family: zhipu
+    open_weights: true
+    context_tokens: 131072
+    supports_tools: true
+    cost_per_1m_input_usd: 1.40
+    cost_per_1m_output_usd: 4.40
+    cost_per_1m_cached_input_usd: 0.26   # Fireworks-published cached rate
+
+  - name: gpt-5.4-nano
+    provider: openai
+    id: gpt-5.4-nano
+    family: openai
+    open_weights: false
+    context_tokens: 200000
+    supports_tools: true
+    cost_per_1m_input_usd: 0.20
+    cost_per_1m_output_usd: 1.25
+    cost_per_1m_cached_input_usd: 0.02   # ~90% off cached input
+
+# Defaults applied to every model unless overridden in an arm definition.
+defaults:
+  temperature: 0.0
+  max_output_tokens: 4096
+  max_tool_calls: 20
+  timeout_seconds: 120

@@ -1,0 +1,44 @@
+# Secrets
+.env
+.env.local
+.envrc
+
+# Claude Code local state
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.uv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build
+dist/
+build/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Reproducibility: large/ephemeral run artifacts are excluded.
+# Researchers reconstruct these from the committed manifests + configs.
+data/raw/
+data/snapshots/
+data/runs/
+data/cache/
+
+# Per-experiment ephemeral caches and logs
+data/**/.openalex_cache/
+data/**/.pmc_cache/
+data/**/runner.log
+
+# Keep committed under data/:
+#   data/corpus/<version>/manifest.json   — frozen corpus definition
+#   data/corpus/<version>/*.parquet        — small per-work tables (IDs, strata, scores)
+#   data/derived/                          — aggregated result tables

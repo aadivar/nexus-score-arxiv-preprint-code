@@ -1,0 +1,41 @@
+# The seven study domains. Each entry resolves at corpus-build time to one or
+# more OpenAlex topic / subfield / field IDs via `nexus snapshot resolve-topics`.
+# The resolved IDs are frozen into data/corpus/<version>/manifest.json so the
+# corpus is reproducible even if OpenAlex re-classifies topics later.
+#
+# `seed_query` is what we hand to OpenAlex `search_topics`. `accept_field_ids`
+# is an optional allowlist used to filter ambiguous matches.
+
+version: v1
+
+domains:
+  - id: biomedical
+    seed_query: cancer biology
+    accept_field_ids: [27, 28]    # Medicine; Biochemistry, Genetics and Molecular Biology
+
+  - id: computer_science
+    seed_query: machine learning
+    accept_field_ids: [17]        # Computer Science
+
+  - id: climate_environment
+    seed_query: climate change
+    accept_field_ids: [23]        # Environmental Science
+
+  - id: physics_materials
+    seed_query: condensed matter physics
+    accept_field_ids: [25, 31]    # Materials Science; Physics and Astronomy
+
+  - id: economics_policy
+    seed_query: economic policy
+    accept_field_ids: [20]        # Economics, Econometrics and Finance
+
+  - id: social_science
+    seed_query: sociology of inequality
+    accept_field_ids: [33]        # Social Sciences
+
+  - id: humanities
+    seed_query: cultural history
+    accept_field_ids: [12]        # Arts and Humanities
+
+# NB: OpenAlex field IDs are short integers (e.g. 17 = Computer Science). The
+# resolver records the full topic URIs alongside these for traceability.

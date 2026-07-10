@@ -1,0 +1,111 @@
+# Preregistered study parameters. Treat this file as frozen once the main
+# experimental run begins. Every value here must be reproducible from this file
+# alone (plus the OpenAlex snapshot it points to).
+
+study:
+  name: nexus-score
+  version: v1
+  description: >
+    Controlled metadata withholding, restoration, grounding, misattribution,
+    cost, and visibility experiments over a single OpenAlex substrate.
+
+# OpenAlex snapshot pinning. When fetch runs, the actual snapshot timestamp
+# from the OpenAlex API headers is recorded in the corpus manifest.
+substrate:
+  source: openalex
+  snapshot_date: null          # null = use live API for now; set to ISO date once frozen
+  api_base: https://api.openalex.org
+
+# Determinism.
+sampling:
+  seed: 20260524               # study start date as integer; never change
+  per_pool_per_domain: 25      # pilot size; scale to 50-100 for the main run
+
+# Inclusion window. The methodology does not mandate a window; this is a
+# defensible default that keeps results in the post-ORCID-adoption era.
+inclusion:
+  min_publication_year: 2015
+  max_publication_year: 2024
+
+# Pools, mapped to OpenAlex filters where possible. Each pool also has a
+# Nexus-side post-filter that is applied after fetch.
+pools:
+  gold_edge:
+    description: >
+      Works with rich OpenAlex metadata, usable as hidden ground truth before
+      masking. Selected by requiring identifier-bearing fields to be populated.
+    # OpenAlex filter keys are the actual API names; see /works?filter=help.
+    # `institutions.ror:!null` enforces ROR presence (no `has_ror` filter exists).
+    openalex_filter:
+      has_doi: true
+      has_orcid: true
+      has_references: true
+      institutions.ror: "!null"
+    require_funding: true        # post-filter on awards/funders presence
+    require_oa_location: true    # adds is_oa:true
+
+  natural_low_nexus:
+    description: >
+      Works that are naturally metadata-poor. Not artificially masked. Used to
+      study observational AI-readiness and Matthew-effect visibility.
+    openalex_filter:
+      has_doi: true              # DOI must exist so the work is identifiable
+      has_orcid: false
+    nexus_composite_max: 0.40    # Nexus post-filter catches ROR/funder poverty
+
+  ambiguity:
+    description: >
+      Works where name-string retrieval is likely to fail. Built from a list of
+      common surnames and ambiguous institution name patterns.
+    common_surnames:
+      - Smith
+      - Wang
+      - Zhang
+      - Li
+      - Chen
+      - Liu
+      - Kim
+      - Singh
+      - Patel
+      - Garcia
+      - Kumar
+      - Lee
+    ambiguous_institution_substrings:
+      - University of California
+      - Chinese Academy of Sciences
+      - Max Planck
+      - CNRS
+
+  equity:
+    description: >
+      Stratified pool for the Matthew-effect analysis. Balanced across country,
+      open-access status, source type, and citation band so that high-Nexus
+      and low-Nexus records exist within the same strata.
+    strata:
+      country_groups:
+        - high_income
+        - upper_middle_income
+        - lower_middle_income
+        - low_income
+      oa_statuses:
+        - gold
+        - green
+        - hybrid
+        - bronze
+        - closed
+      source_types:
+        - journal
+        - repository
+        - conference
+        - book
+      citation_bands:
+        - { min: 0, max: 5 }
+        - { min: 6, max: 25 }
+        - { min: 26, max: 100 }
+        - { min: 101, max: null }
+
+# Frozen schema versions referenced by the artifact paths.
+artifacts:
+  corpus_schema: 1
+  score_schema: 1
+  run_schema: 1

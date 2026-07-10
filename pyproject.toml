@@ -1,0 +1,62 @@
+[project]
+name = "nexus-score"
+version = "0.1.0"
+description = "Nexus Score OpenAlex-MCP methodology: measuring AI-readiness of scholarly records through controlled metadata withholding, restoration, grounding, misattribution, cost, and visibility experiments."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Nexus Score authors" }]
+
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "rich>=13.7",
+    "pandas>=2.2",
+    "pyarrow>=16.0",
+    "python-dotenv>=1.0",
+    "tenacity>=8.3",
+]
+
+[project.optional-dependencies]
+# Model SDKs are only required for the agent-run phase, not corpus construction.
+agents = [
+    "openai>=1.40",
+    "anthropic>=0.34",
+    "google-genai>=0.3",
+]
+analysis = [
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "statsmodels>=0.14",
+    "scikit-learn>=1.5",
+    "jupyterlab>=4.2",
+]
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+nexus = "nexus.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nexus"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"

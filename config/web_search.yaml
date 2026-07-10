@@ -1,0 +1,28 @@
+# Web-search providers used by Arms D (web_only) and E (mcp_plus_web).
+# Pricing captured 2026-05-24 from provider docs.
+
+version: v1
+
+providers:
+  parallel:
+    base_url: https://api.parallel.ai
+    endpoint: /v1beta/search
+    api_key_env: PARALLEL_API_KEY
+    auth_header: x-api-key       # not Bearer
+
+    # Pricing model: per-request, includes up to 10 results.
+    # Extra results charged at $1 per 1000.
+    # Extracted pages (deeper crawl) charged at $1 per 1000.
+    cost_per_request_usd: 0.005
+    cost_per_extra_result_usd: 0.001
+    cost_per_extracted_page_usd: 0.001
+    free_request_quota: 16000     # 16k free requests before billing starts
+    rate_limit_per_minute: 600
+
+# Default web-search call shape used by Arm D / E.
+defaults:
+  # Parallel runtime accepts: fast | agentic | one-shot. `fast` is cheapest +
+  # lowest-latency — right default for identifier-recovery queries.
+  mode: fast
+  max_results: 10
+  max_chars_per_result: 4000

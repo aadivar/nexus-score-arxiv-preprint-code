@@ -1,0 +1,145 @@
+{
+  "built_at": "2026-05-24T04:19:48.257139+00:00",
+  "config_hashes": {
+    "preregistration_yaml": "8f1a42aa37be3d5086186c8b3e59e1b04ec98a1da7fce7b77b4d54cb47152e32"
+  },
+  "domains": [
+    {
+      "accept_field_ids": [
+        27,
+        28
+      ],
+      "field_ids": [
+        "27"
+      ],
+      "id": "biomedical",
+      "seed_query": "cancer biology",
+      "topic_ids": [
+        "T10231",
+        "T10678",
+        "T10543",
+        "T10642"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        17
+      ],
+      "field_ids": [
+        "17"
+      ],
+      "id": "computer_science",
+      "seed_query": "machine learning",
+      "topic_ids": [
+        "T12072",
+        "T12535",
+        "T11714",
+        "T11689",
+        "T12676"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        23
+      ],
+      "field_ids": [
+        "23"
+      ],
+      "id": "climate_environment",
+      "seed_query": "climate change",
+      "topic_ids": [
+        "T10895",
+        "T11244",
+        "T10119",
+        "T12615",
+        "T13530"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        25,
+        31
+      ],
+      "field_ids": [
+        "31"
+      ],
+      "id": "physics_materials",
+      "seed_query": "condensed matter physics",
+      "topic_ids": [
+        "T11682"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        20
+      ],
+      "field_ids": [
+        "20"
+      ],
+      "id": "economics_policy",
+      "seed_query": "economic policy",
+      "topic_ids": [
+        "T10007",
+        "T11770",
+        "T13825",
+        "T11742",
+        "T11059"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        33
+      ],
+      "field_ids": [
+        "33"
+      ],
+      "id": "social_science",
+      "seed_query": "sociology of inequality",
+      "topic_ids": [
+        "T10153",
+        "T13017"
+      ]
+    },
+    {
+      "accept_field_ids": [
+        12
+      ],
+      "field_ids": [
+        "12"
+      ],
+      "id": "humanities",
+      "seed_query": "cultural history",
+      "topic_ids": [
+        "T13863",
+        "T13167",
+        "T14021",
+        "T13497",
+        "T12409"
+      ]
+    }
+  ],
+  "n_unique_works": 625,
+  "per_pool_per_domain": 25,
+  "pools": {
+    "ambiguity": {
+      "n_rows": 168,
+      "table": "pools/ambiguity.parquet"
+    },
+    "equity": {
+      "n_rows": 140,
+      "table": "pools/equity.parquet"
+    },
+    "gold_edge": {
+      "n_rows": 142,
+      "table": "pools/gold_edge.parquet"
+    },
+    "natural_low_nexus": {
+      "n_rows": 175,
+      "table": "pools/natural_low_nexus.parquet"
+    }
+  },
+  "scores_table": "scores/nexus.parquet",
+  "seed": 20260524,
+  "snapshot_date": null,
+  "version": "v1"
+}

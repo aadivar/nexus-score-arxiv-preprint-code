@@ -1,0 +1,93 @@
+# Nexus Score weights and signal definitions. Frozen for v1.
+#
+# Per the methodology:
+#   Nexus_facet(record) = weighted mean of:
+#     presence              (the field exists)
+#     resolvability         (the field resolves to a stable identifier or object)
+#     edge_specificity      (the field is attached to the correct work/entity relation)
+#     queryability          (the field can be used through the MCP interface)
+#     provenance_of_metadata (the source or status of the field can be inspected)
+#
+#   Nexus(record) = w_provenance * Nexus_provenance + ... + w_access * Nexus_access
+
+version: v1
+
+# Composite weights across the 5 facets. Default: equal.
+facet_weights:
+  provenance: 0.20
+  people: 0.20
+  organizations: 0.20
+  funding: 0.20
+  access: 0.20
+
+# Default signal weights inside each facet. Can be overridden per-facet below.
+default_signal_weights:
+  presence: 0.30
+  resolvability: 0.25
+  edge_specificity: 0.20
+  queryability: 0.15
+  provenance_of_metadata: 0.10
+
+# Operational definitions of each (facet, signal) pair. The score.py module
+# implements these checks directly against the OpenAlex record. Keep names in
+# sync with src/nexus/score.py.
+facets:
+  provenance:
+    presence:
+      checks: [has_work_id, has_doi, has_publication_date, has_source]
+    resolvability:
+      checks: [work_id_resolves, doi_resolves, source_id_resolves]
+    edge_specificity:
+      checks: [has_publication_type, has_references_list, references_have_ids]
+    queryability:
+      checks: [retrievable_by_work_id, retrievable_by_doi, retrievable_by_source]
+    provenance_of_metadata:
+      checks: [has_indexed_in, has_updated_date]
+
+  people:
+    presence:
+      checks: [has_authorships, all_authors_have_display_name]
+    resolvability:
+      checks: [authors_have_openalex_id_rate, authors_have_orcid_rate]
+    edge_specificity:
+      checks: [authorships_have_author_position, authorships_have_institutions]
+    queryability:
+      checks: [retrievable_by_author_id, retrievable_by_orcid]
+    provenance_of_metadata:
+      checks: [authorship_has_raw_affiliation_string]
+
+  organizations:
+    presence:
+      checks: [any_authorship_has_institution]
+    resolvability:
+      checks: [institutions_have_openalex_id_rate, institutions_have_ror_rate]
+    edge_specificity:
+      checks: [institutions_have_country_code_rate, institutions_have_type]
+    queryability:
+      checks: [retrievable_by_institution_id, retrievable_by_ror]
+    provenance_of_metadata:
+      checks: [authorship_has_raw_affiliation_string]
+
+  funding:
+    presence:
+      checks: [has_awards]
+    resolvability:
+      checks: [awards_have_funder_id_rate, awards_have_funder_award_id_rate]
+    edge_specificity:
+      checks: [awards_have_funder_display_name_rate, funders_have_ror_rate]
+    queryability:
+      checks: [retrievable_by_funder_id]
+    provenance_of_metadata:
+      checks: [has_awards]
+
+  access:
+    presence:
+      checks: [has_best_oa_location, has_locations]
+    resolvability:
+      checks: [best_oa_location_has_landing_page, best_oa_location_has_pdf_url]
+    edge_specificity:
+      checks: [has_oa_status, has_license, has_version]
+    queryability:
+      checks: [retrievable_by_oa_status, retrievable_by_license]
+    provenance_of_metadata:
+      checks: [best_oa_location_has_source, best_oa_location_has_is_oa]
