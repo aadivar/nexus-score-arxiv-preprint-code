@@ -462,13 +462,15 @@ def figure_7_substitution(df: pd.DataFrame) -> Path:
     if sub.empty:
         return Path()
 
-    fig, axes = plt.subplots(
-        1, sub["model"].nunique(), figsize=(5.6 * sub["model"].nunique(), 5.2), sharey=True,
+    models = sorted(sub["model"].unique())
+    ncols = 3
+    nrows = int(np.ceil(len(models) / ncols))
+    fig, axes_grid = plt.subplots(
+        nrows, ncols, figsize=(15, 9.5), sharey=True, squeeze=False,
     )
-    if sub["model"].nunique() == 1:
-        axes = [axes]
+    axes = list(axes_grid.flat)
     arms_order = sorted(sub["arm"].unique())
-    for ax, model in zip(axes, sorted(sub["model"].unique())):
+    for ax, model in zip(axes, models):
         ms = sub[sub["model"] == model]
         share = (ms.groupby(["arm", "outcome"]).size()
                    .unstack(fill_value=0)
@@ -482,23 +484,27 @@ def figure_7_substitution(df: pd.DataFrame) -> Path:
             color=[OUTCOME_COLORS[o] for o in OUTCOME_ORDER],
             edgecolor="white", linewidth=0.5, width=0.85,
         )
-        ax.set_title(f"{model}  (n cells={len(ms)})", fontsize=11, weight="bold")
+        ax.set_title(f"{model}  (n cells={len(ms)})", fontsize=12, weight="bold")
         ax.set_xlabel("")
         ax.set_ylim(0, 1)
         ax.set_xticklabels([ARM_PRETTY.get(a, a) for a in arms_order],
-                           rotation=0, fontsize=8)
+                           rotation=0, fontsize=10)
+        ax.tick_params(axis="y", labelsize=10)
         ax.legend().remove()
         ax.grid(axis="y", alpha=0.3)
-    axes[0].set_ylabel("share")
+    for ax in axes[len(models):]:
+        ax.remove()
+    for row in range(nrows):
+        axes[row * ncols].set_ylabel("share", fontsize=11)
 
     handles = [plt.Rectangle((0, 0), 1, 1, color=OUTCOME_COLORS[o]) for o in OUTCOME_ORDER]
     fig.legend(
         handles, [OUTCOME_PRETTY[o] for o in OUTCOME_ORDER],
         loc="upper center", bbox_to_anchor=(0.5, 1.02),
-        ncol=4, frameon=False, fontsize=9,
+        ncol=4, frameon=False, fontsize=11,
     )
     # No embedded figure title: numbering and description live in the LaTeX caption.
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
     p = OUT / "figure7_substitution.png"
     fig.savefig(p, dpi=300, bbox_inches="tight")
     plt.close(fig)
